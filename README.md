@@ -1,0 +1,2 @@
+# nette-newsletter
+Newsletter
