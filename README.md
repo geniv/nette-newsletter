@@ -34,21 +34,6 @@ extensions:
     newsletter: Newsletter\Bridges\Nette\Extension
 ```
 
-    /**
-     * komponenta newsletteru
-     *
-     * @return NewsletterControl
-     */
-//    protected function createComponentNewsletter()
-//    {
-//        return $this->context->getByType(NewsletterControl::class);
-//    }
-
-onSuccess
-$this->parent->flashMessage('Váš email byl uložen.', 'success');
-$this->parent->redirect('this');
-
-
 usage:
 ```php
 use Newsletter\NewsletterForm;
