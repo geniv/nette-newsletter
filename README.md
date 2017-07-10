@@ -1,6 +1,6 @@
 Newsletter
 ==========
-Newsletter form
+Newsletter form component
 
 Installation
 ------------
@@ -21,13 +21,18 @@ require:
 "geniv/nette-locale": ">=1.0.0"
 ```
 
-table: newsletter
+neon configure:
+```neon
+# newsletter
+newsletter:
+    tablePrefix: %tablePrefix%
+```
 
-# komponenta newsletter
-- \NewsletterControl(%tablePrefix%)
-
-
-
+neon configure extension:
+```neon
+extensions:
+    newsletter: Newsletter\Bridges\Nette\Extension
+```
 
     /**
      * komponenta newsletteru
@@ -38,3 +43,28 @@ table: newsletter
 //    {
 //        return $this->context->getByType(NewsletterControl::class);
 //    }
+
+onSuccess
+$this->parent->flashMessage('Váš email byl uložen.', 'success');
+$this->parent->redirect('this');
+
+
+usage:
+```php
+use Newsletter\NewsletterForm;
+
+protected function createComponentNewsletterForm(NewsletterForm $newsletterForm)
+{
+    //$mailerLiteForm->setTemplatePath(__DIR__ . '/templates/NewsletterForm.latte');
+    $newsletterForm->onSuccess[] = function (array $values) {
+        $this->flashMessage('Email has been save!', 'success');
+        $this->redirect('this');
+    };
+    return $newsletterForm;
+}
+```
+
+usage:
+```latte
+{control newsletterForm}
+```
