@@ -2,13 +2,12 @@
 
 namespace Newsletter;
 
+use Nette\Application\UI\Form;
 use Nette\Localization\ITranslator;
 use Translator\Translator;
 use Locale\Locale;
-use dibi;
 use Dibi\Connection;
 use Nette\Application\UI\Control;
-use Nette\Utils\ArrayHash;
 
 
 /**
@@ -53,7 +52,7 @@ class NewsletterForm extends Control
         $this->tableNewsletter = $parameters['tablePrefix'] . self::TABLE_NAME;
 
         $this->connection = $connection;
-        $this->idLocale = $this->locale->getId();
+        $this->idLocale = $locale->getId();
         $this->translator = $translator;
         $this->templatePath = __DIR__ . '/NewsletterForm.latte';    // implicit path
     }
@@ -88,7 +87,7 @@ class NewsletterForm extends Control
             ->setAttribute('autocomplete', 'off');
         $form->addSubmit('send', 'newsletter-form-send');
 
-        $form->onSuccess[] = function (Form $form, ArrayHash $values) {
+        $form->onSuccess[] = function (Form $form, array $values) {
             $arr = [
                 'id_locale' => $this->idLocale,
                 'email'     => $values['email'],
