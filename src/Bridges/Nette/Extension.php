@@ -29,6 +29,6 @@ class Extension extends CompilerExtension
         $config = $this->validateConfig($this->defaults);
 
         $builder->addDefinition($this->prefix('default'))
-            ->setClass(NewsletterForm::class, [$config]);
+            ->setFactory(NewsletterForm::class, [$config]);
     }
 }
