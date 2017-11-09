@@ -4,7 +4,6 @@ Newsletter form component
 
 Installation
 ------------
-
 ```sh
 $ composer require geniv/nette-newsletter
 ```
@@ -21,6 +20,8 @@ require:
 "geniv/nette-locale": ">=1.0.0"
 ```
 
+Include in application
+----------------------
 neon configure:
 ```neon
 # newsletter
