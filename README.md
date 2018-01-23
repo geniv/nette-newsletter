@@ -22,6 +22,7 @@ require:
 
 Include in application
 ----------------------
+
 neon configure:
 ```neon
 # newsletter
