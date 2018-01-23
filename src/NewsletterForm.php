@@ -4,7 +4,6 @@ namespace Newsletter;
 
 use Nette\Application\UI\Form;
 use Nette\Localization\ITranslator;
-use Translator\Translator;
 use Locale\ILocale;
 use Dibi\Connection;
 use Nette\Application\UI\Control;
@@ -30,7 +29,7 @@ class NewsletterForm extends Control
     private $tableNewsletter;
     /** @var string template path */
     private $templatePath;
-    /** @var Translator class */
+    /** @var ITranslator class */
     private $translator;
     /** @var callback method */
     public $onSuccess;
