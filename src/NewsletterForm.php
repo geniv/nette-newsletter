@@ -5,7 +5,7 @@ namespace Newsletter;
 use Nette\Application\UI\Form;
 use Nette\Localization\ITranslator;
 use Translator\Translator;
-use Locale\Locale;
+use Locale\ILocale;
 use Dibi\Connection;
 use Nette\Application\UI\Control;
 
@@ -41,10 +41,10 @@ class NewsletterForm extends Control
      *
      * @param array            $parameters
      * @param Connection       $connection
-     * @param Locale           $locale
+     * @param ILocale          $locale
      * @param ITranslator|null $translator
      */
-    public function __construct(array $parameters, Connection $connection, Locale $locale, ITranslator $translator = null)
+    public function __construct(array $parameters, Connection $connection, ILocale $locale, ITranslator $translator = null)
     {
         parent::__construct();
 
