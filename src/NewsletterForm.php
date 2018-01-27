@@ -13,7 +13,7 @@ use Nette\Application\UI\Control;
  * Class NewsletterForm
  *
  * @author  geniv
- * @package NewsletterForm
+ * @package Newsletter
  */
 class NewsletterForm extends Control
 {
