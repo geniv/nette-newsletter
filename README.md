@@ -26,8 +26,9 @@ neon configure:
 ```neon
 # newsletter
 newsletter:
+#    autowired: false
     tablePrefix: %tablePrefix%
-#   formContainer: FormContainer
+#   formContainer: Newsletter\FormContainer
     events:
         - Newsletter\Events\DibiEvent
         - AjaxFlashMessageEvent
