@@ -1,7 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Newsletter;
 
+use GeneralForm\IEventContainer;
+use GeneralForm\IFormContainer;
+use GeneralForm\ITemplatePath;
 use Nette\Application\UI\Form;
 use Nette\Localization\ITranslator;
 use Locale\ILocale;
@@ -15,44 +18,51 @@ use Nette\Application\UI\Control;
  * @author  geniv
  * @package Newsletter
  */
-class NewsletterForm extends Control
+class NewsletterForm extends Control implements ITemplatePath
 {
     // define constant table names
     const
         TABLE_NAME = 'newsletter';
 
-    /** @var Connection database connection from DI */
-    protected $connection;
-    /** @var int id locale */
-    private $idLocale;
-    /** @var string table names */
+    /** @var string */
     private $tableNewsletter;
-    /** @var string template path */
-    private $templatePath;
-    /** @var ITranslator class */
+    /** @var IFormContainer */
+    private $formContainer;
+    /** @var IEventContainer */
+    private $eventContainer;
+    /** @var Connection */
+    protected $connection;
+    /** @var int */
+    private $idLocale;
+    /** @var ITranslator */
     private $translator;
-    /** @var callback method */
-    public $onSuccess;
+    /** @var string */
+    private $templatePath;
+    /** @var callback */
+    public $onSuccess, $onException;
 
 
     /**
      * NewsletterForm constructor.
      *
-     * @param array            $parameters
+     * @param string           $tablePrefix
+     * @param IFormContainer   $formContainer
+     * @param array            $events
      * @param Connection       $connection
      * @param ILocale          $locale
      * @param ITranslator|null $translator
      */
-    public function __construct(array $parameters, Connection $connection, ILocale $locale, ITranslator $translator = null)
+    public function __construct(string $tablePrefix, IFormContainer $formContainer, array $events, Connection $connection, ILocale $locale, ITranslator $translator = null)
     {
         parent::__construct();
 
         // define table names
-        $this->tableNewsletter = $parameters['tablePrefix'] . self::TABLE_NAME;
-
+        $this->tableNewsletter = $tablePrefix . self::TABLE_NAME;
+        $this->formContainer = $formContainer;
         $this->connection = $connection;
         $this->idLocale = $locale->getId();
         $this->translator = $translator;
+
         $this->templatePath = __DIR__ . '/NewsletterForm.latte';    // implicit path
     }
 
@@ -61,32 +71,36 @@ class NewsletterForm extends Control
      * Set template path.
      *
      * @param string $path
-     * @return $this
      */
-    public function setTemplatePath($path)
+    public function setTemplatePath(string $path)
     {
         $this->templatePath = $path;
-        return $this;
     }
 
 
     /**
-     * Create component newsletter form with success callback.
+     * Create component form.
      *
      * @param $name
      * @return Form
      */
-    protected function createComponentForm($name)
+    protected function createComponentForm(string $name): Form
     {
         $form = new Form($this, $name);
         $form->setTranslator($this->translator);
-        $form->addText('email', 'newsletter-form-email')
-            ->setRequired('newsletter-form-email-required')
-            ->addRule(Form::EMAIL, 'newsletter-form-email-rule-email')
-            ->setAttribute('autocomplete', 'off');
-        $form->addSubmit('send', 'newsletter-form-send');
+        $this->formContainer->getForm($form);
 
         $form->onSuccess[] = function (Form $form, array $values) {
+            try {
+                $this->eventContainer->setValues($values);
+                $this->eventContainer->notify();
+
+                $this->onSuccess($values);
+            } catch (ContactException $e) {
+                $this->onException($e);
+            }
+
+
             $arr = [
                 'id_locale' => $this->idLocale,
                 'email'     => $values['email'],
@@ -104,11 +118,12 @@ class NewsletterForm extends Control
 
 
     /**
-     * Render default.
+     * Render.
      */
     public function render()
     {
         $template = $this->getTemplate();
+
         $template->setTranslator($this->translator);
         $template->setFile($this->templatePath);
         $template->render();
