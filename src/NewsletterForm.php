@@ -2,6 +2,7 @@
 
 namespace Newsletter;
 
+use GeneralForm\EventContainer;
 use GeneralForm\IEventContainer;
 use GeneralForm\IFormContainer;
 use GeneralForm\ITemplatePath;
@@ -59,6 +60,7 @@ class NewsletterForm extends Control implements ITemplatePath
         // define table names
         $this->tableNewsletter = $tablePrefix . self::TABLE_NAME;
         $this->formContainer = $formContainer;
+        $this->eventContainer = new EventContainer($this, $events);
         $this->connection = $connection;
         $this->idLocale = $locale->getId();
         $this->translator = $translator;
@@ -101,17 +103,17 @@ class NewsletterForm extends Control implements ITemplatePath
             }
 
 
-            $arr = [
-                'id_locale' => $this->idLocale,
-                'email'     => $values['email'],
-                'added%sql' => 'NOW()',
-                'ip'        => $_SERVER['REMOTE_ADDR'],
-            ];
-
-            $ret = $this->connection->insert($this->tableNewsletter, $arr)->execute();
-            if ($ret > 0) {
-                $this->onSuccess($values);
-            }
+//            $arr = [
+//                'id_locale' => $this->idLocale,
+//                'email'     => $values['email'],
+//                'added%sql' => 'NOW()',
+//                'ip'        => $_SERVER['REMOTE_ADDR'],
+//            ];
+//
+//            $ret = $this->connection->insert($this->tableNewsletter, $arr)->execute();
+//            if ($ret > 0) {
+//                $this->onSuccess($values);
+//            }
         };
         return $form;
     }
