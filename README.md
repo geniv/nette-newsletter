@@ -26,7 +26,7 @@ neon configure:
 ```neon
 # newsletter
 newsletter:
-#    autowired: false
+#    autowired: true
     tablePrefix: %tablePrefix%
 #   formContainer: Newsletter\FormContainer
     events:

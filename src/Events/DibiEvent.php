@@ -5,6 +5,7 @@ namespace Newsletter\Events;
 use Dibi\Connection;
 use GeneralForm\IEvent;
 use GeneralForm\IEventContainer;
+use Locale\ILocale;
 use Nette\SmartObject;
 
 
@@ -18,18 +19,31 @@ class DibiEvent implements IEvent
 {
     use SmartObject;
 
+    // define constant table names
+    const
+        TABLE_NAME = 'newsletter';
+
+    /** @var string */
+    private $tableNewsletter;
     /** @var Connection */
     protected $connection;
+    /** @var int */
+    private $idLocale;
 
 
     /**
      * DibiEvent constructor.
      *
+     * @param string     $tablePrefix
      * @param Connection $connection
+     * @param ILocale    $locale
      */
-    public function __construct(string $tablePrefix, Connection $connection)
+    public function __construct(string $tablePrefix, Connection $connection, ILocale $locale)
     {
+        // define table names
+        $this->tableNewsletter = $tablePrefix . self::TABLE_NAME;
         $this->connection = $connection;
+        $this->idLocale = $locale->getId();
     }
 
 //FIXME prepsat!!
@@ -40,9 +54,20 @@ class DibiEvent implements IEvent
      *
      * @param IEventContainer $eventContainer
      * @param array           $values
+     * @throws \Dibi\Exception
      */
     public function update(IEventContainer $eventContainer, array $values)
     {
-        // TODO: Implement update() method.
+        $arr = [
+            'id_locale' => $this->idLocale,
+            'email'     => $values['email'],
+            'added%sql' => 'NOW()',
+            'ip'        => $_SERVER['REMOTE_ADDR'],
+        ];
+
+        $ret = $this->connection->insert($this->tableNewsletter, $arr)->execute();
+        if ($ret > 0) {
+            $this->onSuccess($values);
+        }
     }
 }

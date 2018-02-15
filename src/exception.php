@@ -1,7 +1,16 @@
-<?php
+<?php declare(strict_types=1);
+
+namespace Newsletter;
+
+use Exception;
+
+
 /**
- * Created by PhpStorm.
- * User: geniv
- * Date: 16.2.18
- * Time: 0:36
+ * Class ContactException
+ *
+ * @author  geniv
+ * @package Newsletter
  */
+class ContactException extends Exception
+{
+}

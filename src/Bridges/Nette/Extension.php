@@ -18,7 +18,7 @@ class Extension extends CompilerExtension
 {
     /** @var array default values */
     private $defaults = [
-        'autowired'     => null,
+        'autowired'     => true,
         'tablePrefix'   => null,
         'formContainer' => FormContainer::class,
         'events'        => [],
