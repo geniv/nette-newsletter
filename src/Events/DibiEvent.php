@@ -27,10 +27,12 @@ class DibiEvent implements IEvent
      *
      * @param Connection $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(string $tablePrefix, Connection $connection)
     {
         $this->connection = $connection;
     }
+
+//FIXME prepsat!!
 
 
     /**

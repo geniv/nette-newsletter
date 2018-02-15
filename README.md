@@ -30,7 +30,7 @@ newsletter:
     tablePrefix: %tablePrefix%
 #   formContainer: Newsletter\FormContainer
     events:
-        - Newsletter\Events\DibiEvent
+        - Newsletter\Events\DibiEvent(%tablePrefix%)
         - AjaxFlashMessageEvent
 ```
 
