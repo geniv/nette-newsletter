@@ -33,8 +33,8 @@ class Extension extends CompilerExtension
         $builder = $this->getContainerBuilder();
         $config = $this->validateConfig($this->defaults);
 
-        $formContainer = GeneralForm::getFormContainerDefinition($this);
-        $events = GeneralForm::getEventContainerDefinition($this);
+        $formContainer = GeneralForm::getDefinitionFormContainer($this);
+        $events = GeneralForm::getDefinitionEventContainer($this);
 
         $builder->addDefinition($this->prefix('default'))
             ->setFactory(NewsletterForm::class, [$config['tablePrefix'], $formContainer, $events])

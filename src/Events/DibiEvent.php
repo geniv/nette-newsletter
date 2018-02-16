@@ -46,8 +46,6 @@ class DibiEvent implements IEvent
         $this->idLocale = $locale->getId();
     }
 
-//FIXME prepsat!!
-
 
     /**
      * Update.
@@ -64,10 +62,6 @@ class DibiEvent implements IEvent
             'added%sql' => 'NOW()',
             'ip'        => $_SERVER['REMOTE_ADDR'],
         ];
-
-        $ret = $this->connection->insert($this->tableNewsletter, $arr)->execute();
-        if ($ret > 0) {
-            $this->onSuccess($values);
-        }
+        $this->connection->insert($this->tableNewsletter, $arr)->execute();
     }
 }
