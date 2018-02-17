@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Newsletter\Bridges\Nette;
 
+use GeneralForm\GeneralForm;
 use Nette\DI\CompilerExtension;
+use Newsletter\FormContainer;
 use Newsletter\NewsletterForm;
 
 
@@ -16,7 +18,10 @@ class Extension extends CompilerExtension
 {
     /** @var array default values */
     private $defaults = [
-        'tablePrefix' => null,
+        'autowired'     => true,
+        'tablePrefix'   => null,
+        'formContainer' => FormContainer::class,
+        'events'        => [],
     ];
 
 
@@ -28,7 +33,11 @@ class Extension extends CompilerExtension
         $builder = $this->getContainerBuilder();
         $config = $this->validateConfig($this->defaults);
 
+        $formContainer = GeneralForm::getDefinitionFormContainer($this);
+        $events = GeneralForm::getDefinitionEventContainer($this);
+
         $builder->addDefinition($this->prefix('default'))
-            ->setFactory(NewsletterForm::class, [$config]);
+            ->setFactory(NewsletterForm::class, [$config['tablePrefix'], $formContainer, $events])
+            ->setAutowired($config['autowired']);
     }
 }
