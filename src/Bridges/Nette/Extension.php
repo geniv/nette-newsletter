@@ -36,8 +36,9 @@ class Extension extends CompilerExtension
         $formContainer = GeneralForm::getDefinitionFormContainer($this);
         $events = GeneralForm::getDefinitionEventContainer($this);
 
+        // define form
         $builder->addDefinition($this->prefix('default'))
-            ->setFactory(NewsletterForm::class, [$config['tablePrefix'], $formContainer, $events])
+            ->setFactory(NewsletterForm::class, [$formContainer, $events])
             ->setAutowired($config['autowired']);
     }
 }
