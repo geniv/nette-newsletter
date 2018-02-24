@@ -31,6 +31,7 @@ newsletter:
 #   formContainer: Newsletter\FormContainer
     events:
         - Newsletter\Events\DibiEvent(%tablePrefix%)
+        - ClearFormEvent
         - AjaxFlashMessageEvent
 ```
 
